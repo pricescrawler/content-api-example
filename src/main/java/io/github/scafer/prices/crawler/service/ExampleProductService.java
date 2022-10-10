@@ -1,6 +1,7 @@
 package io.github.scafer.prices.crawler.service;
 
 import io.github.scafer.prices.crawler.content.common.dto.product.ProductDto;
+import io.github.scafer.prices.crawler.content.common.dto.product.ProductListItemDto;
 import io.github.scafer.prices.crawler.content.common.dto.product.search.SearchProductDto;
 import io.github.scafer.prices.crawler.content.common.dto.product.search.SearchProductsDto;
 import io.github.scafer.prices.crawler.content.common.util.DateTimeUtils;
@@ -13,11 +14,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 @Service
 @Qualifier("local.example")
 public class ExampleProductService extends BaseProductService {
+    Random random = new Random();
+
     protected ExampleProductService(CatalogDataService catalogDataService, ProductDataService productDatabaseService, ProductCacheService productCacheService) {
         super("local", "example", catalogDataService, productDatabaseService, productCacheService);
     }
@@ -35,9 +39,9 @@ public class ExampleProductService extends BaseProductService {
     }
 
     @Override
-    protected CompletableFuture<SearchProductDto> updateItemLogic(SearchProductDto query) {
+    protected CompletableFuture<ProductListItemDto> updateItemLogic(ProductListItemDto productListItem) {
         var product = getExampleProduct("example");
-        return CompletableFuture.completedFuture(new SearchProductDto(query.getLocale(), query.getCatalog(), product, query.getData()));
+        return CompletableFuture.completedFuture(new ProductListItemDto(productListItem.getLocale(), productListItem.getCatalog(), product, productListItem.getData(), productListItem.getQuantity(), productListItem.isHistoryEnabled()));
     }
 
     private List<ProductDto> getExampleProductList() {
@@ -60,10 +64,12 @@ public class ExampleProductService extends BaseProductService {
         product.setEanUpcList(List.of("123456789"));
         product.setDate(DateTimeUtils.getCurrentDateTime());
         product.setRegularPrice("1,20€");
-        product.setCampaignPrice("1,00€");
+        if (random.nextBoolean()) {
+            product.setCampaignPrice("1,00€");
+        }
         product.setPricePerQuantity("1,00€ /un");
         product.setProductUrl(String.format("%s/%s", catalog.getBaseUrl(), query));
-        product.setImageUrl(String.format("%s/%s.png", catalog.getBaseUrl(), query));
+        product.setImageUrl("https://via.placeholder.com/150");
         return product;
     }
 }
