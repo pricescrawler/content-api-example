@@ -5,9 +5,9 @@
 Implementation of [prices-crawler-content-base](https://github.com/prices-crawler/content-base) for the following
 catalogs:
 
-| #   | Name       | Reference     |
-|-----|------------|---------------|
-| 1   | example    | local.example |
+| #   | Name    | Reference     |
+|-----|---------|---------------|
+| 1   | example | local.example |
 
 ## 📁 Requirements
 

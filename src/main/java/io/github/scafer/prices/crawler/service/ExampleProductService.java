@@ -5,8 +5,9 @@ import io.github.scafer.prices.crawler.content.common.dto.product.ProductListIte
 import io.github.scafer.prices.crawler.content.common.dto.product.search.SearchProductDto;
 import io.github.scafer.prices.crawler.content.common.dto.product.search.SearchProductsDto;
 import io.github.scafer.prices.crawler.content.common.util.DateTimeUtils;
-import io.github.scafer.prices.crawler.content.repository.catalog.service.CatalogDataService;
-import io.github.scafer.prices.crawler.content.repository.product.service.ProductDataService;
+import io.github.scafer.prices.crawler.content.common.util.IdUtils;
+import io.github.scafer.prices.crawler.content.repository.catalog.CatalogDataService;
+import io.github.scafer.prices.crawler.content.repository.product.ProductDataService;
 import io.github.scafer.prices.crawler.content.service.product.base.BaseProductService;
 import io.github.scafer.prices.crawler.content.service.product.cache.ProductCacheService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,54 +23,56 @@ import java.util.concurrent.CompletableFuture;
 public class ExampleProductService extends BaseProductService {
     Random random = new Random();
 
-    protected ExampleProductService(CatalogDataService catalogDataService, ProductDataService productDatabaseService, ProductCacheService productCacheService) {
+    protected ExampleProductService(CatalogDataService catalogDataService,
+                                    ProductDataService productDatabaseService,
+                                    ProductCacheService productCacheService) {
         super("local", "example", catalogDataService, productDatabaseService, productCacheService);
     }
 
     @Override
     protected CompletableFuture<SearchProductsDto> searchItemLogic(String query) {
-        var products = getExampleProductList();
+        var products = parseProductsFromContent(query, DateTimeUtils.getCurrentDateTime());
         return CompletableFuture.completedFuture(new SearchProductsDto(localeName, catalogName, products, generateCatalogData()));
     }
 
     @Override
     protected CompletableFuture<SearchProductDto> searchItemByProductUrlLogic(String productUrl) {
-        var product = getExampleProduct(productUrl);
+        var product = parseProductFromContent(productUrl, "1", DateTimeUtils.getCurrentDateTime());
         return CompletableFuture.completedFuture(new SearchProductDto(localeName, catalogName, product));
     }
 
     @Override
     protected CompletableFuture<ProductListItemDto> updateItemLogic(ProductListItemDto productListItem) {
-        var product = getExampleProduct("example");
+        var product = parseProductFromContent("example", "1", DateTimeUtils.getCurrentDateTime());
         return CompletableFuture.completedFuture(new ProductListItemDto(productListItem.getLocale(), productListItem.getCatalog(), product, productListItem.getData(), productListItem.getQuantity(), productListItem.isHistoryEnabled()));
     }
 
-    private List<ProductDto> getExampleProductList() {
+    @Override
+    public List<ProductDto> parseProductsFromContent(String content, String dateTime) {
         var productList = new ArrayList<ProductDto>();
 
         for (var i = 0; i < 10; i++) {
-            productList.add(getExampleProduct(String.valueOf(i)));
+            productList.add(parseProductFromContent(String.valueOf(i), String.valueOf(i), dateTime));
         }
 
         return productList;
     }
 
-    private ProductDto getExampleProduct(String query) {
-        var product = new ProductDto();
-        product.setReference(query);
-        product.setName(String.format("Example Product %s", query));
-        product.setBrand("Example Brand 1");
-        product.setQuantity("1 /un");
-        product.setDescription("Example Description 1");
-        product.setEanUpcList(List.of("123456789"));
-        product.setDate(DateTimeUtils.getCurrentDateTime());
-        product.setRegularPrice("1,20€");
-        if (random.nextBoolean()) {
-            product.setCampaignPrice("1,00€");
-        }
-        product.setPricePerQuantity("1,00€ /un");
-        product.setProductUrl(String.format("%s/%s", catalog.getBaseUrl(), query));
-        product.setImageUrl("https://via.placeholder.com/150");
-        return product;
+    @Override
+    public ProductDto parseProductFromContent(String content, String query, String dateTime) {
+        return ProductDto.builder()
+                .id(IdUtils.parse(localeName, catalogName, query))
+                .reference(query)
+                .name(String.format("Example Product %s", query))
+                .brand("Example Brand 1")
+                .quantity("1 /un")
+                .description("Example Description 1")
+                .eanUpcList(List.of("123456789"))
+                .regularPrice("1,20€")
+                .campaignPrice(random.nextBoolean() ? "1,00€" : null)
+                .pricePerQuantity("1,00€ /un")
+                .productUrl(String.format("%s/%s", catalog.getBaseUrl(), query))
+                .imageUrl("https://via.placeholder.com/150")
+                .build();
     }
 }
