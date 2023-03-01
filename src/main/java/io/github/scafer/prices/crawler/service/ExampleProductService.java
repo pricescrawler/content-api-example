@@ -73,6 +73,7 @@ public class ExampleProductService extends BaseProductService {
                 .pricePerQuantity("1,00€ /un")
                 .productUrl(String.format("%s/%s", catalog.getBaseUrl(), query))
                 .imageUrl("https://via.placeholder.com/150")
+                .date(DateTimeUtils.getCurrentDateTime())
                 .build();
     }
 }
