@@ -1,15 +1,15 @@
-package io.github.scafer.prices.crawler.service;
+package io.github.pricescrawler.service;
 
-import io.github.scafer.prices.crawler.content.common.dto.product.ProductDto;
-import io.github.scafer.prices.crawler.content.common.dto.product.ProductListItemDto;
-import io.github.scafer.prices.crawler.content.common.dto.product.search.SearchProductDto;
-import io.github.scafer.prices.crawler.content.common.dto.product.search.SearchProductsDto;
-import io.github.scafer.prices.crawler.content.common.util.DateTimeUtils;
-import io.github.scafer.prices.crawler.content.common.util.IdUtils;
-import io.github.scafer.prices.crawler.content.repository.catalog.CatalogDataService;
-import io.github.scafer.prices.crawler.content.repository.product.ProductDataService;
-import io.github.scafer.prices.crawler.content.service.product.base.BaseProductService;
-import io.github.scafer.prices.crawler.content.service.product.cache.ProductCacheService;
+import io.github.pricescrawler.content.common.dto.product.ProductDto;
+import io.github.pricescrawler.content.common.dto.product.ProductListItemDto;
+import io.github.pricescrawler.content.common.dto.product.search.SearchProductDto;
+import io.github.pricescrawler.content.common.dto.product.search.SearchProductsDto;
+import io.github.pricescrawler.content.common.util.DateTimeUtils;
+import io.github.pricescrawler.content.common.util.IdUtils;
+import io.github.pricescrawler.content.repository.catalog.CatalogDataService;
+import io.github.pricescrawler.content.repository.product.ProductDataService;
+import io.github.pricescrawler.content.service.product.base.BaseProductService;
+import io.github.pricescrawler.content.service.product.cache.ProductCacheService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 

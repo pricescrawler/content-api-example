@@ -1,4 +1,4 @@
-package io.github.scafer.prices.crawler;
+package io.github.pricescrawler;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

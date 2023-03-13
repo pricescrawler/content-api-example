@@ -1,4 +1,4 @@
-package io.github.scafer.prices.crawler;
+package io.github.pricescrawler;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

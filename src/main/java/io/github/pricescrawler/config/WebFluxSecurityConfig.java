@@ -1,4 +1,4 @@
-package io.github.scafer.prices.crawler.config;
+package io.github.pricescrawler.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
