@@ -4,7 +4,7 @@ ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM openjdk:17-slim
+FROM openjdk:18-slim
 LABEL PROJECT_NAME=prices-crawler-content-api-example
 WORKDIR application
 COPY --from=builder application/dependencies/ ./
