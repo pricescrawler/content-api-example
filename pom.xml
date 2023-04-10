@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.prices-crawler</groupId>
+    <groupId>io.github.pricescrawler</groupId>
     <artifactId>prices-crawler-content-api-example</artifactId>
     <version>0.1.0</version>
     <name>prices-crawler-content-api-example</name>
@@ -30,6 +30,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
@@ -39,7 +43,7 @@
 
         <!--Other Dependencies -->
         <dependency>
-            <groupId>io.github.prices-crawler.content</groupId>
+            <groupId>io.github.pricescrawler.content</groupId>
             <artifactId>prices-crawler-content-controller</artifactId>
             <version>${prices-crawler-content-controller.version}</version>
         </dependency>

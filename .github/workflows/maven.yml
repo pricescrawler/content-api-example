@@ -28,7 +28,7 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Clone prices-crawler-content-base dependency
-        run: git clone https://github.com/prices-crawler/content-base.git ${{ github.workspace }}/dependency/prices-crawler-content-base
+        run: git clone https://github.com/pricescrawler/content-base.git ${{ github.workspace }}/dependency/prices-crawler-content-base
       - name: Checkout to prices-crawler-content-base v0.1.0
         run: cd ${{ github.workspace }}/dependency/prices-crawler-content-base && git checkout v0.1.0
       - name: Build and install prices-crawler-content-base dependency
