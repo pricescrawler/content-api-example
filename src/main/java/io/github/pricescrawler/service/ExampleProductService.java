@@ -1,7 +1,10 @@
 package io.github.pricescrawler.service;
 
+import io.github.pricescrawler.content.common.dao.catalog.CatalogDao;
 import io.github.pricescrawler.content.common.dto.product.ProductDto;
 import io.github.pricescrawler.content.common.dto.product.ProductListItemDto;
+import io.github.pricescrawler.content.common.dto.product.filter.FilterProductByQueryDto;
+import io.github.pricescrawler.content.common.dto.product.filter.FilterProductByUrlDto;
 import io.github.pricescrawler.content.common.dto.product.search.SearchProductDto;
 import io.github.pricescrawler.content.common.dto.product.search.SearchProductsDto;
 import io.github.pricescrawler.content.common.util.DateTimeUtils;
@@ -30,38 +33,38 @@ public class ExampleProductService extends BaseProductService {
     }
 
     @Override
-    protected CompletableFuture<SearchProductsDto> searchItemLogic(String query) {
-        var products = parseProductsFromContent(query, DateTimeUtils.getCurrentDateTime());
-        return CompletableFuture.completedFuture(new SearchProductsDto(localeName, catalogName, products, generateCatalogData()));
+    protected CompletableFuture<SearchProductsDto> searchItemLogic(FilterProductByQueryDto filterProduct) {
+        var products = parseProductsFromContent(filterProduct.getComposedCatalogKey(), filterProduct.getQuery(), DateTimeUtils.getCurrentDateTime());
+        return CompletableFuture.completedFuture(new SearchProductsDto(localeId, filterProduct.getComposedCatalogKey(), products, generateCatalogData(filterProduct.getStoreId())));
     }
 
     @Override
-    protected CompletableFuture<SearchProductDto> searchItemByProductUrlLogic(String productUrl) {
-        var product = parseProductFromContent(productUrl, "1", DateTimeUtils.getCurrentDateTime());
-        return CompletableFuture.completedFuture(new SearchProductDto(localeName, catalogName, product));
+    protected CompletableFuture<SearchProductDto> searchItemByProductUrlLogic(FilterProductByUrlDto filterProductByUrl) {
+        var product = parseProductFromContent(filterProductByUrl.getComposedCatalogKey(), filterProductByUrl.getUrl(), "1", DateTimeUtils.getCurrentDateTime());
+        return CompletableFuture.completedFuture(new SearchProductDto(localeId, filterProductByUrl.getComposedCatalogKey(), product));
     }
 
     @Override
     protected CompletableFuture<ProductListItemDto> updateItemLogic(ProductListItemDto productListItem) {
-        var product = parseProductFromContent("example", "1", DateTimeUtils.getCurrentDateTime());
+        var product = parseProductFromContent(productListItem.getCatalog(), "example", "1", DateTimeUtils.getCurrentDateTime());
         return CompletableFuture.completedFuture(new ProductListItemDto(productListItem.getLocale(), productListItem.getCatalog(), product, productListItem.getData(), productListItem.getQuantity(), productListItem.isHistoryEnabled()));
     }
 
     @Override
-    public List<ProductDto> parseProductsFromContent(String content, String dateTime) {
+    public List<ProductDto> parseProductsFromContent(String catalogKey, String content, String dateTime) {
         var productList = new ArrayList<ProductDto>();
 
         for (var i = 0; i < 10; i++) {
-            productList.add(parseProductFromContent(String.valueOf(i), String.valueOf(i), dateTime));
+            productList.add(parseProductFromContent(catalogKey, String.valueOf(i), String.valueOf(i), dateTime));
         }
 
         return productList;
     }
 
     @Override
-    public ProductDto parseProductFromContent(String content, String query, String dateTime) {
+    public ProductDto parseProductFromContent(String catalogKey, String query, String content, String dateTime) {
         return ProductDto.builder()
-                .id(IdUtils.parse(localeName, catalogName, query))
+                .id(IdUtils.parse(localeId, catalogKey, query))
                 .reference(query)
                 .name(String.format("Example Product %s", query))
                 .brand("Example Brand 1")
@@ -71,7 +74,7 @@ public class ExampleProductService extends BaseProductService {
                 .regularPrice("1,20€")
                 .campaignPrice(random.nextBoolean() ? "1,00€" : null)
                 .pricePerQuantity("1,00€ /un")
-                .productUrl(String.format("%s/%s", catalog.getBaseUrl(), query))
+                .productUrl(String.format("%s/%s", optionalCatalog.map(CatalogDao::getBaseUrl), query))
                 .imageUrl("https://via.placeholder.com/150")
                 .date(DateTimeUtils.getCurrentDateTime())
                 .build();
