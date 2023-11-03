@@ -10,7 +10,7 @@ import io.github.pricescrawler.content.common.dto.product.search.SearchProductsD
 import io.github.pricescrawler.content.common.util.DateTimeUtils;
 import io.github.pricescrawler.content.common.util.IdUtils;
 import io.github.pricescrawler.content.repository.catalog.CatalogDataService;
-import io.github.pricescrawler.content.repository.product.ProductDataService;
+import io.github.pricescrawler.content.repository.product.history.ProductHistoryService;
 import io.github.pricescrawler.content.service.product.base.BaseProductService;
 import io.github.pricescrawler.content.service.product.cache.ProductCacheService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,9 +27,9 @@ public class ExampleProductService extends BaseProductService {
     Random random = new Random();
 
     protected ExampleProductService(CatalogDataService catalogDataService,
-                                    ProductDataService productDatabaseService,
+                                    ProductHistoryService productHistoryService,
                                     ProductCacheService productCacheService) {
-        super("local", "example", catalogDataService, productDatabaseService, productCacheService);
+        super("local", "example", catalogDataService, productHistoryService, productCacheService);
     }
 
     @Override
