@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.pricescrawler</groupId>
     <artifactId>prices-crawler-content-api-example</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1-SNAPSHOT</version>
     <name>prices-crawler-content-api-example</name>
     <packaging>jar</packaging>
 
@@ -13,13 +12,13 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.1.5</version>
-        <relativePath/>
+        <relativePath />
     </parent>
 
     <properties>
         <java.version>17</java.version>
         <springdoc.version>2.2.0</springdoc.version>
-        <prices-crawler-content-controller.version>0.2.1</prices-crawler-content-controller.version>
+        <prices-crawler-content-controller.version>0.3.0</prices-crawler-content-controller.version>
         <de.flapdoodle.embed.mongo.spring30x.version>4.9.3</de.flapdoodle.embed.mongo.spring30x.version>
     </properties>
 
@@ -27,6 +26,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

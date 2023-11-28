@@ -29,8 +29,8 @@ jobs:
           cache: maven
       - name: Clone prices-crawler-content-base dependency
         run: git clone https://github.com/pricescrawler/content-base.git ${{ github.workspace }}/dependency/prices-crawler-content-base
-      - name: Checkout to prices-crawler-content-base v0.2.1
-        run: cd ${{ github.workspace }}/dependency/prices-crawler-content-base && git checkout v0.2.1
+      - name: Checkout to prices-crawler-content-base v0.3.0
+        run: cd ${{ github.workspace }}/dependency/prices-crawler-content-base && git checkout v0.3.0
       - name: Build and install prices-crawler-content-base dependency
         run: mvn clean install -DskipTests --file ${{ github.workspace }}/dependency/prices-crawler-content-base/pom.xml
       - name: Build with Project
