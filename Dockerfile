@@ -1,10 +1,10 @@
-FROM maven:3.8.5-openjdk-17 AS builder
+FROM maven:3.9.6-amazoncorretto-21 AS builder
 WORKDIR application
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM openjdk:17-slim
+FROM amazoncorretto:21
 LABEL PROJECT_NAME=prices-crawler-content-api-example
 WORKDIR application
 COPY --from=builder application/dependencies/ ./
