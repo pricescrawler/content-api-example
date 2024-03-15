@@ -16,11 +16,11 @@ import io.github.pricescrawler.content.service.product.base.BaseProductService;
 import io.github.pricescrawler.content.service.product.cache.ProductCacheService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @Qualifier("local.example")
@@ -35,21 +35,21 @@ public class ExampleProductService extends BaseProductService {
     }
 
     @Override
-    protected CompletableFuture<SearchProductsDto> searchItemLogic(FilterProductByQueryDto filterProduct) {
+    protected Mono<SearchProductsDto> searchItemLogic(FilterProductByQueryDto filterProduct) {
         var products = parseProductsFromContent(filterProduct.getComposedCatalogKey(), filterProduct.getQuery(), DateTimeUtils.getCurrentDateTime());
-        return CompletableFuture.completedFuture(new SearchProductsDto(localeId, filterProduct.getComposedCatalogKey(), products, generateCatalogData(filterProduct.getStoreId())));
+        return Mono.just(new SearchProductsDto(localeId, filterProduct.getComposedCatalogKey(), products, generateCatalogData(filterProduct.getStoreId())));
     }
 
     @Override
-    protected CompletableFuture<SearchProductDto> searchItemByProductUrlLogic(FilterProductByUrlDto filterProductByUrl) {
+    protected Mono<SearchProductDto> searchItemByProductUrlLogic(FilterProductByUrlDto filterProductByUrl) {
         var product = parseProductFromContent(filterProductByUrl.getComposedCatalogKey(), filterProductByUrl.getUrl(), "1", DateTimeUtils.getCurrentDateTime());
-        return CompletableFuture.completedFuture(new SearchProductDto(localeId, filterProductByUrl.getComposedCatalogKey(), product));
+        return Mono.just(new SearchProductDto(localeId, filterProductByUrl.getComposedCatalogKey(), product));
     }
 
     @Override
-    protected CompletableFuture<ProductListItemDto> updateItemLogic(ProductListItemDto productListItem) {
+    protected Mono<ProductListItemDto> updateItemLogic(ProductListItemDto productListItem) {
         var product = parseProductFromContent(productListItem.getCatalog(), "example", "1", DateTimeUtils.getCurrentDateTime());
-        return CompletableFuture.completedFuture(new ProductListItemDto(productListItem.getLocale(), productListItem.getCatalog(), product, productListItem.getData(), productListItem.getQuantity(), productListItem.isHistoryEnabled()));
+        return Mono.just(new ProductListItemDto(productListItem.getLocale(), productListItem.getCatalog(), product, productListItem.getData(), productListItem.getQuantity(), productListItem.isHistoryEnabled()));
     }
 
     @Override
