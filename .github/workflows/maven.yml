@@ -1,23 +1,27 @@
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
 name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+
+    env:
+      PRICES_CRAWLER_VERSION: v0.4.4
+
+    services:
+      docker:
+        image: docker:latest
+        options: --privileged
+        ports:
+          - 2375:2375
 
     steps:
       - uses: actions/checkout@v3
@@ -29,8 +33,8 @@ jobs:
           cache: maven
       - name: Clone prices-crawler-content-base dependency
         run: git clone https://github.com/pricescrawler/content-base.git ${{ github.workspace }}/dependency/prices-crawler-content-base
-      - name: Checkout to prices-crawler-content-base v0.4.2
-        run: cd ${{ github.workspace }}/dependency/prices-crawler-content-base && git checkout v0.4.2
+      - name: Checkout to prices-crawler-content-base ${{ env.PRICES_CRAWLER_VERSION }}
+        run: cd ${{ github.workspace }}/dependency/prices-crawler-content-base && git checkout ${{ env.PRICES_CRAWLER_VERSION }}
       - name: Build and install prices-crawler-content-base dependency
         run: mvn clean install -DskipTests --file ${{ github.workspace }}/dependency/prices-crawler-content-base/pom.xml
       - name: Build with Project
