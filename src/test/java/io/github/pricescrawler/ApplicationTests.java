@@ -1,5 +1,6 @@
 package io.github.pricescrawler;
 
+import io.github.pricescrawler.util.MongoContainerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ApplicationTests {
+class ApplicationTests extends MongoContainerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
